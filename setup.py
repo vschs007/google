@@ -29,12 +29,10 @@
 
 from os import chdir
 from os.path import abspath, join, split
-
 # Make sure we are standing in the correct directory.
 # Old versions of distutils didn't take care of this.
 here = split(abspath(__file__))[0]
 chdir(here)
-
 # Package metadata.
 metadata = dict(
     name='google',
@@ -57,7 +55,6 @@ metadata = dict(
                  "Topic :: Software Development :: Libraries :: Python Modules",
                  ],
 )
-
 # Prefer setuptools over the old distutils.
 # If setuptools is available, use install_requires.
 try:
