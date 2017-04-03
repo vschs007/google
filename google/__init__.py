@@ -29,12 +29,10 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 __all__ = ['search', 'search_images', 'search_news', 'search_videos', 'search_shop', 'search_books', 'search_apps', 'lucky']
-
 import os
 import random
 import sys
 import time
-
 if sys.version_info[0] > 2:
     from http.cookiejar import LWPCookieJar
     from urllib.request import Request, urlopen
@@ -44,21 +42,18 @@ else:
     from urllib import quote_plus
     from urllib2 import Request, urlopen
     from urlparse import urlparse, parse_qs
-
 try:
     from bs4 import BeautifulSoup
     is_bs4 = True
 except ImportError:
     from BeautifulSoup import BeautifulSoup
     is_bs4 = False
-
 # URL templates to make Google searches.
 url_home = "https://www.google.%(tld)s/"
 url_search = "https://www.google.%(tld)s/search?hl=%(lang)s&q=%(query)s&btnG=Google+Search&tbs=%(tbs)s&safe=%(safe)s&tbm=%(tpe)s"
 url_next_page = "https://www.google.%(tld)s/search?hl=%(lang)s&q=%(query)s&start=%(start)d&tbs=%(tbs)s&safe=%(safe)s&tbm=%(tpe)s"
 url_search_num = "https://www.google.%(tld)s/search?hl=%(lang)s&q=%(query)s&num=%(num)d&btnG=Google+Search&tbs=%(tbs)s&safe=%(safe)s&tbm=%(tpe)s"
 url_next_page_num = "https://www.google.%(tld)s/search?hl=%(lang)s&q=%(query)s&num=%(num)d&start=%(start)d&tbs=%(tbs)s&safe=%(safe)s&tbm=%(tpe)s"
-
 # Cookie jar. Stored at the user's home folder.
 home_folder = os.getenv('HOME')
 if not home_folder:
@@ -82,7 +77,6 @@ try:
         user_agents_list = [_.strip() for _ in fp.readlines()]
 except Exception:
     user_agents_list = [USER_AGENT]
-
 
 # Get a random user agent.
 def get_random_user_agent():
@@ -108,7 +102,6 @@ def get_page(url, user_agent=None):
 
     @rtype:  str
     @return: Web page retrieved for the given URL.
-
     @raise IOError: An exception is raised on error.
     @raise urllib2.URLError: An exception is raised on error.
     @raise urllib2.HTTPError: An exception is raised on error.
@@ -125,12 +118,10 @@ def get_page(url, user_agent=None):
     cookie_jar.save()
     return html
 
-
 # Filter links found in the Google result pages HTML code.
 # Returns None if the link doesn't yield a valid result.
 def filter_result(link):
     try:
-
         # Valid results are absolute URLs not pointing to a Google domain
         # like images.google.com or googleusercontent.com
         o = urlparse(link, 'http')
@@ -177,7 +168,6 @@ def search_shop(query, tld='com', lang='en', tbs='0', safe='off', num=10, start=
                 stop=None, pause=2.0, only_standard=False, extra_params={}):
     return search(query, tld, lang, tbs, safe, num, start, stop, pause, only_standard, extra_params, tpe='shop')
 
-
 # Shortcut to search books
 def search_books(query, tld='com', lang='en', tbs='0', safe='off', num=10, start=0,
                  stop=None, pause=2.0, only_standard=False, extra_params={}):
@@ -195,7 +185,6 @@ def lucky(query, tld='com', lang='en', tbs='0', safe='off', only_standard=False,
           extra_params={}, tpe=''):
     gen = search(query, tld, lang, tbs, safe, 1, 0, 1, 0., only_standard, extra_params, tpe)
     return next(gen)
-
 # Returns a generator that yields URLs.
 def search(query, tld='com', lang='en', tbs='0', safe='off', num=10, start=0,
            stop=None, pause=2.0, only_standard=False, extra_params={}, tpe='', user_agent=None):
